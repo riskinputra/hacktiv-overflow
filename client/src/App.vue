@@ -1,54 +1,46 @@
 <template>
-  <div id="app">
-    <header>
-      <span>Vue.js PWA</span>
-    </header>
-    <main>
-      <img src="./assets/logo.png" alt="Vue.js PWA">
-      <router-view></router-view>
-    </main>
-  </div>
+  <v-app id="app">
+    <!-- <v-navigation-drawer class="hidden-md-and-up"></v-navigation-drawer> -->
+    <header-navbar></header-navbar>
+    <v-content>
+      <v-container fluid>
+        <router-view></router-view>
+      </v-container>
+    </v-content>
+    <v-footer id="footer" dark app class="pa-4">
+      <p>&copy; Copyright 2018 - Riski N Putra</p>
+    </v-footer>
+  </v-app>
 </template>
 
 <script>
+import HeaderNavbar from './components/HeaderNavbar'
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    'header-navbar': HeaderNavbar
+  }
 }
 </script>
 
 <style>
-body {
+* {
   margin: 0;
+  padding: 0;
 }
-
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  font-family: 'Quicksand', sans-serif;
 }
+#footer {
+  background: #232526;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #414345, #232526);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #414345, #232526); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-main {
+  color: white;
+  padding: 10px 0;
+  font-weight: bold;
+}
+.footer {
   text-align: center;
-  margin-top: 40px;
-}
-
-header {
-  margin: 0;
-  height: 56px;
-  padding: 0 16px 0 24px;
-  background-color: #35495E;
-  color: #ffffff;
-}
-
-header span {
-  display: block;
-  position: relative;
-  font-size: 20px;
-  line-height: 1;
-  letter-spacing: .02em;
-  font-weight: 400;
-  box-sizing: border-box;
-  padding-top: 16px;
 }
 </style>
