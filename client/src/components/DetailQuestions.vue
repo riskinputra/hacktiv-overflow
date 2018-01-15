@@ -60,11 +60,17 @@
             <v-flex xs1>
               <v-btn color="grey" dark icon><v-icon>arrow_drop_up</v-icon></v-btn>
             </v-flex>
-            <v-flex xs9>
+            <v-flex xs8>
               <v-subheader><b>{{answer.userId.username}}</b></v-subheader>
               <p style="white-space: pre-wrap;">
                 {{answer.comment}}
               </p>
+            </v-flex>
+            <v-flex xs1>
+              <v-spacer></v-spacer>
+              <v-btn icon color="red" dark @click="remove(answer._id)">
+                <v-icon>delete</v-icon>
+              </v-btn>
             </v-flex>
             <v-divider ></v-divider>
           </v-card-actions>
@@ -116,6 +122,9 @@ export default {
     addAnswer (data) {
       // console.log(data)
       this.$store.dispatch('createAnswer', data)
+    },
+    remove (data) {
+      this.$store.dispatch('removeAnswer', data)
     },
     clear () {
       this.$refs.form.reset()

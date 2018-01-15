@@ -8,17 +8,17 @@
           <v-flex xs12>
             <v-card style="margin-bottom:5px;">
               <v-card-actions>
-                  <v-flex xs1 class="text-xs-center">
+                  <v-flex xs1 md1 class="text-xs-center">
                     <h1>{{item.upVote.length}}</h1>
                     <p style="color:blue">Votes</p>
                   </v-flex>
-                  <v-flex xs10>
+                  <v-flex xs9 md10 style="padding-left: 10px;">
                     <a id="detail" @click="detailQuestion(item._id)">
                       <h1>{{item.title}}</h1>
                       <p>{{item.userId.username}}</p>
                     </a>
                   </v-flex>
-                  <v-flex xs1>
+                  <v-flex xs2 md1>
                     <v-spacer></v-spacer>
                     <v-btn icon color="blue" dark>
                       <v-icon>mode_edit</v-icon>
@@ -97,4 +97,42 @@ a#detail {
   color: black;
   text-decoration: none;
 }
+
+/* Visibility */
+  /* Desktop and bigger */
+  @media (min-width: 960px) {
+    .visible-small {
+      display: none !important;
+    }
+    .visible-medium {
+      display: none !important;
+    }
+    .hidden-large {
+      display: none !important;
+    }
+  }
+  /* Tablets portrait */
+  @media (min-width: 768px) and (max-width: 959px) {
+    .visible-small {
+      display: none !important;
+    }
+    .visible-large {
+      display: none !important ;
+    }
+    .hidden-medium {
+      display: none !important;
+    }
+  }
+  /* Phone landscape and smaller*/
+  @media (max-width: 767px) {
+    .visible-medium {
+      display: none !important;
+    }
+    .visible-large {
+      display: none !important;
+    }
+    .hidden-small {
+      display: none !important;
+    }
+  }
 </style>

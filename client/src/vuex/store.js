@@ -37,6 +37,13 @@ export const store = new Vuex.Store({
     setAddAnswer (state, payload) {
       state.answer.push(payload)
     },
+    setDeleteAnswer (state, payload) {
+      const filterAnswer = state.answer.filter(newAnswer => {
+        return newAnswer._id !== payload._id
+      })
+      console.log('filter', filterAnswer)
+      state.answer = filterAnswer
+    },
     clearError (state) {
       state.error = null
     }
@@ -120,6 +127,21 @@ export const store = new Vuex.Store({
           console.log('createAnswer', data.data)
           commit('setLoading', false)
           commit('setAddAnswer', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    removeAnswer ({ commit }, payload) {
+      console.log(payload)
+      http.delete(`/api/answers/${payload}`, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('removeAnswer', data.data)
+          commit('setDeleteAnswer', data.data)
         })
         .catch(err => {
           console.error(err)
