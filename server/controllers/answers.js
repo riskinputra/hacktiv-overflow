@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken')
 
 class AnswerController {
   static getAllAnswer(req, res) {
-    Answer.find({questionId: req.headers.questionId})
+    Answer.find()
     .sort({createdAt: -1})
     .populate('userId')
     .then(result => {
@@ -29,7 +29,10 @@ class AnswerController {
         data: result
       })
     })
-    .catch(err => res.status(500).send(err))
+    .catch(err => {
+      console.log(err)
+      res.status(500).send(err)
+    })
   }
 
   static removeAnswer(req, res) {

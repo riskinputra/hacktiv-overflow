@@ -1,5 +1,5 @@
 <template>
-  <section id="signup">
+  <section id="signin">
     <v-layout row v-if="error">
       <v-flex xs12 sm6 offset-sm3>
         <app-alert @dismissed="onDismissed" :text="error.message"></app-alert>
@@ -11,16 +11,6 @@
           <v-card-text>
             <v-container>
               <v-form v-model="valid" ref="form" lazy-validation>
-                <v-text-field
-                  name="username"
-                  label="Username"
-                  id="username"
-                  v-model="form.username"
-                  type="text"
-                  required
-                  :rules="usernameRules"
-                >
-                </v-text-field>
                 <v-text-field
                   name="email"
                   label="E-mail"
@@ -41,33 +31,20 @@
                   :rules="passwordRules"
                 >
                 </v-text-field>
-                <v-text-field
-                  name="confirmPassword"
-                  label="Validate Password"
-                  id="confirmPassword"
-                  v-model="confirmPassword"
-                  type="password"
-                  :rules="[comparePasswords]">
-                </v-text-field>
-                <v-checkbox
-                  label="Do you agree?"
-                  v-model="checkbox"
-                  :rules="[v => !!v || 'You must agree to continue!']"
-                  required
-                >
-                </v-checkbox>
                 <v-btn 
                   type="submit"
                   color="info"
                   :loading="loading"
-                  @click.prevent="onSignup(form)"
+                  @click.prevent="onSignin(form)"
                   :disabled="!valid"
                 >SignUp</v-btn>
                 <v-btn type="submit" color="orange" dark @click="clear">Clear</v-btn>
               </v-form>
             </v-container>
           </v-card-text>
-          <v-card-text class="text-xs-center">Have an account? <router-link to="/signin">SignIn</router-link></v-card-text>
+          <v-card-text class="text-xs-center">
+            Don't have an account? <router-link to="/signup">Sign Up</router-link>
+          </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
@@ -81,7 +58,6 @@ export default {
       valid: true,
       form: {
         email: '',
-        username: '',
         password: ''
       },
       confirmPassword: '',
@@ -93,30 +69,26 @@ export default {
         (v) => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
       ],
       /* eslint-enable */
-      usernameRules: [
-        (v) => !!v || 'Username is required'
-      ],
       passwordRules: [
         (v) => !!v || 'Password is required'
-      ]
+      ],
+      err: false
     }
   },
   computed: {
-    comparePasswords () {
-      return this.form.password !== this.confirmPassword ? 'Passwords do not match.' : true
-    },
     loading () {
       return this.$store.getters.loading
     },
     error () {
+      this.err = true
       return this.$store.getters.error
     }
   },
   methods: {
-    onSignup (data) {
+    onSignin (data) {
       if (this.$refs.form.validate()) {
-        this.$store.dispatch('signUserUp', data)
-        this.$router.push('/signin')
+        this.$store.dispatch('signUserIn', data)
+        this.$router.push('/')
       }
     },
     onDismissed () {
