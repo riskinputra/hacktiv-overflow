@@ -15,7 +15,8 @@ export const store = new Vuex.Store({
     error: null,
     questions: [],
     answer: [],
-    questionsById: null
+    questionsById: null,
+    isLogin: false
   },
   mutations: {
     setLoading (state, payload) {
@@ -71,6 +72,9 @@ export const store = new Vuex.Store({
       let idx = state.answer.findIndex(question => question._id === payload._id)
       state.answer.splice(idx, 1, payload)
     },
+    setIsLogin (state, payload) {
+      state.isLogin = payload
+    },
     clearError (state) {
       state.error = null
     }
@@ -82,6 +86,7 @@ export const store = new Vuex.Store({
       http.post('/api/signup', payload)
         .then(({ data }) => {
           console.log(data)
+          commit('setLoading', false)
         })
         .catch(err => {
           console.error(err)
@@ -95,6 +100,9 @@ export const store = new Vuex.Store({
       http.post('/api/signin', payload)
         .then(({ data }) => {
           localStorage.setItem('token', data.token)
+          location.reload()
+          commit('setIsLogin', true)
+          commit('setLoading', false)
         })
         .catch(err => {
           console.error(err)
@@ -268,6 +276,9 @@ export const store = new Vuex.Store({
     },
     answers (state) {
       return state.answer
+    },
+    isLogin (state) {
+      return state.isLogin
     }
   }
 })

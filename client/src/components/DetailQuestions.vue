@@ -63,9 +63,7 @@
             </v-flex>
             <v-flex xs8>
               <v-subheader><b>{{answer.userId.username}}</b></v-subheader>
-              <p style="white-space: pre-wrap;">
-                {{answer.comment}}
-              </p>
+              <p style="white-space: pre-wrap; padding-left:10px;">{{answer.comment}}</p>
             </v-flex>
             <v-flex xs1>
               <v-spacer></v-spacer>

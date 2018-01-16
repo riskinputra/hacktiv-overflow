@@ -31,7 +31,7 @@
                   :loading="loading"
                   @click.prevent="addQuestions(form)"
                   :disabled="!valid"
-                >SignUp</v-btn>
+                >Add</v-btn>
                 <v-btn type="submit" color="orange" dark @click="clear">Clear</v-btn>
               </v-form>
             </v-container>
