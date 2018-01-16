@@ -19,7 +19,7 @@ class AnswerController {
     const userId = jwt.verify(req.headers.token, process.env.SECRET_KEY).id
     let newAnswer = new Answer({
       userId: userId,
-      questionId: req.headers.questionId,
+      questionId: req.body.questionId,
       comment: req.body.comment
     })
     newAnswer.save()
@@ -58,10 +58,12 @@ class AnswerController {
     const userId = jwt.verify(req.headers.token, process.env.SECRET_KEY).id
     Answer.findById(req.params.id)
     .then(result => {
+      console.log('masuk')
       if(result.downVote.indexOf(userId) != -1) {
         result.downVote.splice(result.downVote.indexOf(userId),1);
       }
       if(result.upVote.indexOf(userId) == -1) {
+        console.log('sini')
         result.upVote.push(userId)
         result.save()
         .then(newUpVote => {
@@ -70,12 +72,18 @@ class AnswerController {
             data: newUpVote
           })
         })
-        .catch(err => res.status(500).send(err))
+        .catch(err => {
+          console.log('ono', err)
+          res.status(500).send(err)
+        })
       } else {
         res.status(500).send('You have clicked up vote')
       }
     })
-    .catch(err => res.status(500).send(err))
+    .catch(err => {
+      console.log('ini', err)
+      res.status(500).send(err)
+    })
   }
 
   static downVoteAnswer(req, res) {

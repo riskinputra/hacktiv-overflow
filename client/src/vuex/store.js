@@ -14,7 +14,8 @@ export const store = new Vuex.Store({
     loading: false,
     error: null,
     questions: [],
-    answer: []
+    answer: [],
+    questionsById: null
   },
   mutations: {
     setLoading (state, payload) {
@@ -43,6 +44,40 @@ export const store = new Vuex.Store({
       })
       console.log('filter', filterAnswer)
       state.answer = filterAnswer
+    },
+    setQuestionById (state, payload) {
+      console.log('setQuestionById', payload)
+      state.questionsById = payload
+    },
+    setQuestionUpdate (state, payload) {
+      let idx = state.questions.findIndex(question => question._id === payload._id)
+      state.questions.splice(idx, 1, payload)
+    },
+    setDeleteQuestions (state, payload) {
+      const filterQuestions = state.questions.filter(newQuestion => {
+        return newQuestion._id !== payload._id
+      })
+      state.questions = filterQuestions
+    },
+    setQuestionsUpvote (state, payload) {
+      let idx = state.questions.findIndex(question => question._id === payload._id)
+      console.log(idx)
+      state.questions.splice(idx, 1, payload)
+    },
+    setQuestionsDownvote (state, payload) {
+      let idx = state.questions.findIndex(question => question._id === payload._id)
+      console.log('setQuestionsDownvote', idx)
+      state.questions.splice(idx, 1, payload)
+    },
+    setAnswersUpvote (state, payload) {
+      let idx = state.answer.findIndex(question => question._id === payload._id)
+      console.log(idx)
+      state.answer.splice(idx, 1, payload)
+    },
+    setAnswersDownvote (state, payload) {
+      let idx = state.answer.findIndex(question => question._id === payload._id)
+      console.log(idx)
+      state.answer.splice(idx, 1, payload)
     },
     clearError (state) {
       state.error = null
@@ -100,6 +135,47 @@ export const store = new Vuex.Store({
           console.error(err)
         })
     },
+    getQuestionsById ({ commit }, payload) {
+      // console.log('getQuestionsById', payload)
+      http.get(`/api/questions/${payload}`)
+        .then(({ data }) => {
+          console.log('getQuestionsById', data.data)
+          commit('setQuestionById', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    updateQuestions ({ commit }, payload) {
+      console.log(payload)
+      http.put(`/api/questions/${payload.questionId}`, payload, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('updateQuestions', data.data)
+          commit('setQuestionUpdate', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    removeQuestions ({ commit }, payload) {
+      console.log('ini', payload)
+      http.delete(`/api/questions/${payload}`, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('removeAnswer', data.data)
+          commit('setDeleteQuestions', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
     getAnswers ({ commit }) {
       console.log('answer')
       http.get('/api/answers')
@@ -113,14 +189,14 @@ export const store = new Vuex.Store({
     },
     createAnswer ({ commit }, payload) {
       commit('setLoading', true)
-      console.log(payload)
+      console.log('createAnswer', payload)
       let newData = {
-        comment: payload.comment
+        comment: payload.comment,
+        questionId: payload.questionId
       }
       http.post('/api/answers', newData, {
         headers: {
-          'token': localStorage.getItem('token'),
-          'questionId': payload.questionId
+          'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
@@ -142,6 +218,65 @@ export const store = new Vuex.Store({
         .then(({ data }) => {
           console.log('removeAnswer', data.data)
           commit('setDeleteAnswer', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    questionsUpVote ({ commit }, payload) {
+      console.log('up', payload)
+      http.put(`/api/questions/${payload}/upvote`, {}, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('questionsUpVote', data.data)
+          commit('setQuestionsUpvote', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    questionsDownVote ({ commit }, payload) {
+      console.log('up', payload)
+      http.put(`/api/questions/${payload}/downvote`, {}, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('questionsDownVote', data.data)
+          commit('setQuestionsDownvote', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    answerUpVote ({ commit }, payload) {
+      console.log(payload)
+      http.put(`/api/answers/${payload}/upvote`, {}, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('answerUpVote', data.data)
+          commit('setAnswersUpvote', data.data)
+        })
+        .catch(err => {
+          console.error(err)
+        })
+    },
+    answerDownVote ({ commit }, payload) {
+      http.put(`/api/answers/${payload}/downvote`, {}, {
+        headers: {
+          'token': localStorage.getItem('token')
+        }
+      })
+        .then(({ data }) => {
+          console.log('answerDownVote', data.data)
+          commit('setAnswersDownvote', data.data)
         })
         .catch(err => {
           console.error(err)

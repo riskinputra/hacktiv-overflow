@@ -5,16 +5,17 @@
         <v-card v-for="(item, index) in questions" :key="index">
           <v-card-actions>
             <v-flex xs1 class="text-xs-center">
-              <v-btn color="grey" dark icon><v-icon>arrow_drop_down</v-icon></v-btn>
+              <v-btn color="grey" dark icon @click="questionDislike(item._id)"><v-icon>arrow_drop_down</v-icon></v-btn>
             </v-flex>
             <v-flex xs1 class="text-xs-center">
                 <h3>{{item.upVote.length}}</h3>
             </v-flex>
             <v-flex xs1>
-              <v-btn color="grey" dark icon><v-icon>arrow_drop_up</v-icon></v-btn>
+              <v-btn color="grey" dark icon @click="questionLike(item._id)"><v-icon>arrow_drop_up</v-icon></v-btn>
             </v-flex>
             <v-flex xs9>
-              <h3 style="padding-left: 10px;">asdkjahskdjhasjd</h3>
+              <h3 style="padding-left: 10px;">{{item.title}}</h3>
+              <p style="padding-left: 10px; white-space: pre-wrap;">{{item.content}}</p>
             </v-flex>
           </v-card-actions>
         </v-card>
@@ -32,7 +33,7 @@
                   name="answer"
                   label="Give Answer"
                   id="answer"
-                  v-model="form.comment"
+                  v-model="comment"
                   type="text"
                   required
                   :rules="commentRules"
@@ -42,7 +43,7 @@
                   type="submit"
                   color="info"
                   :loading="loading"
-                  @click.prevent="addAnswer(form)"
+                  @click.prevent="addAnswer(comment)"
                   :disabled="!valid"
                 >Submit</v-btn>
                 <v-btn type="submit" color="orange" dark @click="clear">Clear</v-btn>
@@ -52,13 +53,13 @@
           </v-card-text>
           <v-card-actions  v-for="(answer, index) in answers" :key="index">
             <v-flex xs1 class="text-xs-center">
-              <v-btn color="grey" dark icon><v-icon>arrow_drop_down</v-icon></v-btn>
+              <v-btn color="grey" dark icon @click="answerDislike(answer._id)"><v-icon>arrow_drop_down</v-icon></v-btn>
             </v-flex>
             <v-flex xs1 class="text-xs-center">
-                <h3>0</h3>
+                <h3>{{answer.upVote.length}}</h3>
             </v-flex>
             <v-flex xs1>
-              <v-btn color="grey" dark icon><v-icon>arrow_drop_up</v-icon></v-btn>
+              <v-btn color="grey" dark icon @click="answerLike(answer._id)"><v-icon>arrow_drop_up</v-icon></v-btn>
             </v-flex>
             <v-flex xs8>
               <v-subheader><b>{{answer.userId.username}}</b></v-subheader>
@@ -86,15 +87,11 @@ export default {
   data () {
     return {
       valid: true,
-      form: {
-        questionId: '',
-        comment: ''
-      },
+      comment: '',
       commentRules: [(v) => !!v || 'Username is required']
     }
   },
   created () {
-    this.questionId = this.$route.params.id
     this.getAllQuestions()
     this.getAnswers()
   },
@@ -108,7 +105,9 @@ export default {
       })
     },
     answers () {
-      return this.$store.getters.answers
+      return this.$store.getters.answers.filter(answer => {
+        return answer.questionId === this.$route.params.id
+      })
     }
   },
   methods: {
@@ -116,12 +115,25 @@ export default {
       'getAllQuestions',
       'getAnswers'
     ]),
+    questionDislike (data) {
+      this.$store.dispatch('questionsDownVote', data)
+    },
+    questionLike (data) {
+      this.$store.dispatch('questionsUpVote', data)
+    },
     listAnswer () {
       this.$store.dispatch('getAnswers')
     },
-    addAnswer (data) {
+    answerDislike (data) {
+      this.$store.dispatch('answerDownVote', data)
+    },
+    answerLike (data) {
+      this.$store.dispatch('answerUpVote', data)
+    },
+    addAnswer (comment) {
       // console.log(data)
-      this.$store.dispatch('createAnswer', data)
+      this.$store.dispatch('createAnswer', {comment, questionId: this.$route.params.id})
+      this.$refs.form.reset()
     },
     remove (data) {
       this.$store.dispatch('removeAnswer', data)

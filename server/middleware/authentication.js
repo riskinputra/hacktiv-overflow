@@ -4,7 +4,6 @@ require('dotenv').config()
 const authentication = (req, res, next)=>{
   jwt.verify(req.headers.token, process.env.SECRET_KEY, function(err, decoded){
     if(err){
-      console.log('masuk')
       return res.status(401).send(err)
     }
     req.headers.decoded = decoded

@@ -20,10 +20,10 @@
                   </v-flex>
                   <v-flex xs2 md1>
                     <v-spacer></v-spacer>
-                    <v-btn icon color="blue" dark>
+                    <v-btn icon color="blue" dark @click="editQuestions(item._id)">
                       <v-icon>mode_edit</v-icon>
                     </v-btn>
-                    <v-btn icon color="red" dark>
+                    <v-btn icon color="red" dark @click="deleteQuestions(item._id)">
                       <v-icon>delete</v-icon>
                     </v-btn>
                   </v-flex>
@@ -71,7 +71,14 @@ export default {
     ]),
     detailQuestion (data) {
       // console.log(data)
-      this.$router.push(`/questions/${data}`)
+      this.$router.push(`/questions/detail/${data}`)
+    },
+    editQuestions (data) {
+      this.$router.push(`/questions/update/${data}`)
+    },
+    deleteQuestions (data) {
+      console.log(data)
+      this.$store.dispatch('removeQuestions', data)
     }
   }
 }

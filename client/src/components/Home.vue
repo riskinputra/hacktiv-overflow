@@ -8,16 +8,16 @@
           <v-flex xs12>
             <v-card style="margin-bottom:5px;">
               <v-card-actions>
-                  <v-flex xs1 class="text-xs-center">
-                    <h1>{{item.upVote.length}}</h1>
-                    <p style="color:blue">Votes</p>
-                  </v-flex>
-                  <v-flex xs11>
-                    <a id="detail">
-                      <h1>{{item.title}}</h1>
-                      <p>{{item.userId.username}}</p>
-                    </a>
-                  </v-flex>
+                <v-flex xs1 md1 class="text-xs-center">
+                  <h1>{{item.upVote.length}}</h1>
+                  <p style="color:blue">Votes</p>
+                </v-flex>
+                <v-flex xs11 md10 style="padding-left: 10px;">
+                  <a id="detail" @click="detailQuestion(item._id)">
+                    <h1>{{item.title}}</h1>
+                    <p>{{item.userId.username}}</p>
+                  </a>
+                </v-flex>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -49,7 +49,11 @@ export default {
   methods: {
     ...mapActions([
       'getAllQuestions'
-    ])
+    ]),
+    detailQuestion (data) {
+      // console.log(data)
+      this.$router.push(`/questions/detail/${data}`)
+    }
   }
 }
 </script>

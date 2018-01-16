@@ -6,6 +6,7 @@ import SignIn from '@/components/SignIn'
 import AddQuestions from '@/components/AddQuestions'
 import TheDashboard from '@/components/TheDashboard'
 import DetailQuestions from '@/components/DetailQuestions'
+import UpdateQuestions from '@/components/UpdateQuestions'
 
 Vue.use(Router)
 
@@ -38,9 +39,14 @@ export default new Router({
       component: TheDashboard
     },
     {
-      path: '/questions/:id',
+      path: '/questions/detail/:id',
       name: 'DetailQuestions',
       component: DetailQuestions
+    },
+    {
+      path: '/questions/update/:id',
+      name: 'UpdateQuestions',
+      component: UpdateQuestions
     }
   ]
 })
