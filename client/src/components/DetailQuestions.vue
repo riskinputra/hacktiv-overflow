@@ -84,7 +84,7 @@ import { mapActions } from 'vuex'
 export default {
   data () {
     return {
-      show: true,
+      show: false,
       valid: true,
       comment: '',
       commentRules: [(v) => !!v || 'Username is required']
@@ -92,7 +92,7 @@ export default {
   },
   created () {
     if (localStorage.getItem('token')) {
-      this.show = false
+      this.show = true
     }
     this.getAllQuestions()
     this.getAnswers()

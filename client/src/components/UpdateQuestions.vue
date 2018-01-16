@@ -65,7 +65,7 @@ export default {
   },
   created () {
     this.form.questionId = this.$route.params.id
-    axios.get(`http://localhost:3000/api/questions/${this.$route.params.id}`)
+    axios.get(`http://54.200.122.183:3000/api/questions/${this.$route.params.id}`)
       .then(result => {
         console.log('ini', result)
         this.form.title = result.data.data.title
