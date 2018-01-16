@@ -22,11 +22,9 @@ export const store = new Vuex.Store({
       state.loading = payload
     },
     setError (state, payload) {
-      console.log('setError', payload)
       state.error = payload
     },
     setAllQuestions (state, payload) {
-      console.log('questions', payload)
       state.questions = payload
     },
     setAddQuestions (state, payload) {
@@ -42,11 +40,9 @@ export const store = new Vuex.Store({
       const filterAnswer = state.answer.filter(newAnswer => {
         return newAnswer._id !== payload._id
       })
-      console.log('filter', filterAnswer)
       state.answer = filterAnswer
     },
     setQuestionById (state, payload) {
-      console.log('setQuestionById', payload)
       state.questionsById = payload
     },
     setQuestionUpdate (state, payload) {
@@ -61,22 +57,18 @@ export const store = new Vuex.Store({
     },
     setQuestionsUpvote (state, payload) {
       let idx = state.questions.findIndex(question => question._id === payload._id)
-      console.log(idx)
       state.questions.splice(idx, 1, payload)
     },
     setQuestionsDownvote (state, payload) {
       let idx = state.questions.findIndex(question => question._id === payload._id)
-      console.log('setQuestionsDownvote', idx)
       state.questions.splice(idx, 1, payload)
     },
     setAnswersUpvote (state, payload) {
       let idx = state.answer.findIndex(question => question._id === payload._id)
-      console.log(idx)
       state.answer.splice(idx, 1, payload)
     },
     setAnswersDownvote (state, payload) {
       let idx = state.answer.findIndex(question => question._id === payload._id)
-      console.log(idx)
       state.answer.splice(idx, 1, payload)
     },
     clearError (state) {
@@ -113,7 +105,6 @@ export const store = new Vuex.Store({
     getAllQuestions ({ commit }) {
       http.get('/api/questions')
         .then(({ data }) => {
-          console.log('allQuestions', data.data)
           commit('setAllQuestions', data.data)
         })
         .catch(err => {
@@ -121,14 +112,12 @@ export const store = new Vuex.Store({
         })
     },
     createQuestions ({ commit }, payload) {
-      console.log('createQuestions', payload)
       http.post('/api/questions', payload, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('allQuestions', data.data)
           commit('setAddQuestions', data.data)
         })
         .catch(err => {
@@ -136,10 +125,8 @@ export const store = new Vuex.Store({
         })
     },
     getQuestionsById ({ commit }, payload) {
-      // console.log('getQuestionsById', payload)
       http.get(`/api/questions/${payload}`)
         .then(({ data }) => {
-          console.log('getQuestionsById', data.data)
           commit('setQuestionById', data.data)
         })
         .catch(err => {
@@ -147,14 +134,12 @@ export const store = new Vuex.Store({
         })
     },
     updateQuestions ({ commit }, payload) {
-      console.log(payload)
       http.put(`/api/questions/${payload.questionId}`, payload, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('updateQuestions', data.data)
           commit('setQuestionUpdate', data.data)
         })
         .catch(err => {
@@ -162,14 +147,12 @@ export const store = new Vuex.Store({
         })
     },
     removeQuestions ({ commit }, payload) {
-      console.log('ini', payload)
       http.delete(`/api/questions/${payload}`, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('removeAnswer', data.data)
           commit('setDeleteQuestions', data.data)
         })
         .catch(err => {
@@ -177,10 +160,8 @@ export const store = new Vuex.Store({
         })
     },
     getAnswers ({ commit }) {
-      console.log('answer')
       http.get('/api/answers')
         .then(({ data }) => {
-          console.log('answer', data.data)
           commit('setAnswer', data.data)
         })
         .catch(err => {
@@ -189,7 +170,6 @@ export const store = new Vuex.Store({
     },
     createAnswer ({ commit }, payload) {
       commit('setLoading', true)
-      console.log('createAnswer', payload)
       let newData = {
         comment: payload.comment,
         questionId: payload.questionId
@@ -200,7 +180,6 @@ export const store = new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log('createAnswer', data.data)
           commit('setLoading', false)
           commit('setAddAnswer', data.data)
         })
@@ -209,14 +188,12 @@ export const store = new Vuex.Store({
         })
     },
     removeAnswer ({ commit }, payload) {
-      console.log(payload)
       http.delete(`/api/answers/${payload}`, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('removeAnswer', data.data)
           commit('setDeleteAnswer', data.data)
         })
         .catch(err => {
@@ -224,14 +201,12 @@ export const store = new Vuex.Store({
         })
     },
     questionsUpVote ({ commit }, payload) {
-      console.log('up', payload)
       http.put(`/api/questions/${payload}/upvote`, {}, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('questionsUpVote', data.data)
           commit('setQuestionsUpvote', data.data)
         })
         .catch(err => {
@@ -239,14 +214,12 @@ export const store = new Vuex.Store({
         })
     },
     questionsDownVote ({ commit }, payload) {
-      console.log('up', payload)
       http.put(`/api/questions/${payload}/downvote`, {}, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('questionsDownVote', data.data)
           commit('setQuestionsDownvote', data.data)
         })
         .catch(err => {
@@ -254,14 +227,12 @@ export const store = new Vuex.Store({
         })
     },
     answerUpVote ({ commit }, payload) {
-      console.log(payload)
       http.put(`/api/answers/${payload}/upvote`, {}, {
         headers: {
           'token': localStorage.getItem('token')
         }
       })
         .then(({ data }) => {
-          console.log('answerUpVote', data.data)
           commit('setAnswersUpvote', data.data)
         })
         .catch(err => {
@@ -275,7 +246,6 @@ export const store = new Vuex.Store({
         }
       })
         .then(({ data }) => {
-          console.log('answerDownVote', data.data)
           commit('setAnswersDownvote', data.data)
         })
         .catch(err => {

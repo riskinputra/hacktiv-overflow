@@ -2,6 +2,15 @@
   <section>
     <v-layout row>
       <v-flex xs12>
+        <v-text-field
+        light
+        solo
+        v-model="search"
+        prepend-icon="search"
+        placeholder="Search Questions"
+        style="width: 100%; min-width: 128px"
+      ></v-text-field>
+      <v-divider></v-divider>
         <v-subheader><b>Questions List</b></v-subheader>
         <v-divider ></v-divider>
         <div v-for="(item, index) in questions" :key="index">
@@ -34,7 +43,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js PWA'
+      search: ''
     }
   },
   created () {
@@ -42,8 +51,10 @@ export default {
   },
   computed: {
     questions () {
-      console.log('questions', this.$store.getters.questions)
-      return this.$store.getters.questions
+      // return this.$store.getters.questions
+      return this.$store.getters.questions.filter(post => {
+        return post.title.toLowerCase().includes(this.search.toLowerCase())
+      })
     }
   },
   methods: {

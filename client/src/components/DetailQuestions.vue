@@ -69,7 +69,7 @@
             </v-flex>
             <v-flex xs1>
               <v-spacer></v-spacer>
-              <v-btn icon color="red" dark @click="remove(answer._id)">
+              <v-btn icon color="red" dark @click="remove(answer._id)" v-show="show">
                 <v-icon>delete</v-icon>
               </v-btn>
             </v-flex>
@@ -86,12 +86,16 @@ import { mapActions } from 'vuex'
 export default {
   data () {
     return {
+      show: true,
       valid: true,
       comment: '',
       commentRules: [(v) => !!v || 'Username is required']
     }
   },
   created () {
+    if (localStorage.getItem('token')) {
+      this.show = false
+    }
     this.getAllQuestions()
     this.getAnswers()
   },
